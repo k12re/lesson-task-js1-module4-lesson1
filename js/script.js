@@ -2,8 +2,7 @@
 
 const url = "https://raw.githubusercontent.com/bttmly/nba/master/data/teams.json";
 
-let resultsContainer = document.querySelector("results");
-
+let resultsContainer = document.querySelector(".results");
 
 async function callAPI() {
     const response = await fetch(url);
@@ -14,16 +13,22 @@ async function callAPI() {
 
     resultsContainer = ""
 
-    for (let i = 0; i < data.length; i++) {
-        console.log(data[i].teamName)
+    for (let i = 0; i < 15; i++) {
+
+        if (data[i].length === 15) {
+            break
+        };
 
         if (data[i].teamName.startsWith("C")) {
             continue
-        }
+        };
 
-        resultsContainer.innerHTML = `${data[i].teamName}`;
+        console.log(data[i].teamName);
+        
+        resultsContainer.innerHTML += `<div>${data.teamName}</div>`;
     }
 
 }
+
 
 callAPI()
