@@ -4,31 +4,50 @@ const url = "https://raw.githubusercontent.com/bttmly/nba/master/data/teams.json
 
 let resultsContainer = document.querySelector(".results");
 
+// we need the code in an async function as we are using the await keyword
 async function callAPI() {
+
+    try {
     const response = await fetch(url);
 
     const data = await response.json();
 
+    // always log and inspect the data you get from an API call to see what properties it has
     console.log(data);
 
-    resultsContainer = ""
+    const teams = data
 
-    for (let i = 0; i < 15; i++) {
+    resultsContainer.innerHTML = "";
 
-        if (data[i].length === 15) {
+    for (let i = 0; i < teams.length; i++) {
+        // we only want to display a maximum of 15 teams
+        // there will be less than 15 if any team names begin with "C"
+        // use break to leave the loop
+        if (i === 15) {
             break
         };
 
-        if (data[i].teamName.startsWith("C")) {
+        const teamName = teams[i]. teamName;
+        const city = teams[i].location;
+
+        // we are checking for small "c" and big "C"
+        // instead of checking for both small "c" and big "C" we can make the teamName lowercase and just check for "c"
+        if (teamName.toLowerCase().startsWith("c") /*|| teamName.startsWith("C")*/) {
             continue
         };
-
-        console.log(data[i].teamName);
         
-        resultsContainer.innerHTML += `<div>${data.teamName}</div>`;
+        resultsContainer.innerHTML += `<div class="card">
+                                        <h4>${teamName}</h4>
+                                        <p>${city}</p>
+                                        </div>`;
     }
+} catch (error) {
+    console.log(error);
+    resultsContainer.innerHTML = message("error", error)
+}
 
 }
 
-
+// call the function
+// without this nothing will happen
 callAPI()
